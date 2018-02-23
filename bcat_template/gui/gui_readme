@@ -1,0 +1,32 @@
+BCAT GUI README 
+
+Created: October 2017
+Readme updated: February 21, 2018
+Creator: Amanda Dewyer
+         Zimmerman Lab - University of Michigan, Ann Arbor
+
+The gui uses openbabel-2.3.1 to convert a chemdraw .cdxml file into a 3d structure
+open babel converts the file and installs H atoms that are not explicitly draw in the cdxml file
+
+The .cdxml file should contain the ligands of interest with the "reactive" atoms
+labeled by highlighting them in a color other thank black on the chem draw. 
+
+Any atoms that are charged and deprotonted should be labeled with a charged symbol within the chemdraw.
+
+The gui performs the following procedure
+1.  converts cdxml file into xyz file labeled as ligands.xyz
+2.  counts number of ligands inside the cdxml file
+3.  assigns a charge to each ligand based on the charges labeled on each ligand
+4.  identifies the number of atoms in each ligand
+5.  identifies which atoms in the ligands.xyz file are considered "reactive"
+    - identifies which atoms are highlighted in a color other than black within the ligand.cdxml file
+7.  creates ligand directories (1 bcat directory for each ligand in the .cdxml file)
+8.  creates the ADD files for each ligand by reading in the labeled atoms and
+    then identifying which ligand they belong to.
+9.  creates the CHARGE1 file for the ligand charge by reading in the listed charges
+10. creates ligand.xyz files for each individual ligand by breaking ligands.xyz into the individual molecules
+11. copies all neccessary files to their respective directories. 
+
+If a 'metalCenter.cdxml' file is included it will be used to generate target.xyz and charge files for the metal center
+If it is not included then the user needs to MANUALLY add target.xyz and CHARGE2 files into the bcatLigand directory 
+to run the M-L binding code. Also double check that the ADD file correctly defines which atoms are being added together

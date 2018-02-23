@@ -1,0 +1,23 @@
+#PBS -t 3,6,8
+#PBS -l nodes=1:ppn=2 -l pmem=2000MB -l walltime=2:00:00
+#PBS -q zimmerman -N Ca_all_noH
+
+ID=`printf "%0*d\n" 3 ${PBS_ARRAYID}`
+#i=$PBS_ARRAYID
+
+source /export/zimmerman/paulzim/qchem/qchemjan42013c/paul.set.local
+#source /export/zimmerman/paulzim/qchem/qchemmay142015/paul.set.local 
+
+cd $PBS_O_WORKDIR
+
+name=`ls q$ID*.inp`
+
+qchem -np 2 $name $name.out 
+
+
+
+
+rm $QCSCRATCH
+
+#rm -f submitall.qsh.o*
+#rm -f submitall.qsh.e* 

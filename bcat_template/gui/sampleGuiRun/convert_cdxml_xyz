@@ -1,0 +1,497 @@
+#!/bin/bash
+
+# cdxml_bcat code
+# Created by Amanda Dewyer, Zimmerman Lab
+# Date: Fall 2017
+# Purpose:
+#
+# convert a .cdxml file containing ligands (ligand.cdxml)
+# to ligand.xyz, ADD, CHARGE files for bcat.exe input
+#
+# convert a .cdxml file containing a metal center (metalCenter.cdxml)
+# to metalCenter.xyz, ADD, CHARGE files for bcat.exe input
+#
+# The code also creates bcat directories for each respective ligand containing
+# the appropriate files for each specific run
+#
+# Note that ligand.xyz will become test.xyz in each respective bcat folder
+# Note that metalCenter.xyz will become target.xyz in each respective bcat folder
+
+###################################
+#                                 #
+#                                 #
+#     METAL CENTER GENERATION     #
+#                                 #
+#                                 #
+###################################
+
+rm -f ADD*
+rm -f gui_output.log
+rm -f colorLigand.txt
+rm -f chargeLigand.txt
+rm -f ligandColorLines.txt
+rm -f CHARGE*
+rm -f labeledAtoms.txt
+rm -f fragAtoms.txt
+rm -f ligand*.xyz
+rm -f ligand.txt
+
+rm -f metal_output.log
+rm -f tmpMetal.cdxml
+rm -f tmpMetalLine.xyz
+rm -f color.txt
+rm -f colorLines.txt
+rm -f metalInfo.txt
+rm -f METAL_LABEL
+
+#check to see if metalCenter.cdxml exists
+file="metalCenter.cdxml"
+if [ -e $file ]
+then 
+
+# step 1: read in metalCenter.cdxml File
+
+# step 1a: assign charge to CHARGE_METAL file 
+
+  metalCenter=1
+  while [ $metalCenter -eq 1 ]; do
+    metalChargeMarker="charge="
+    metalCharge=$(grep "$metalChargeMarker" metalCenter.cdxml)
+    metalChargeVal=$(echo $metalCharge | awk '{print substr($0,8,9)}')
+    echo "$metalChargeVal" > CHARGE_METAL
+    let metalCenter=$metalCenter+1
+    echo "charge= " $metalChargeVal >> metal_output.log
+  done
+
+### section done ###
+
+# step 1c: replace metal center with carbon in 
+#          order to create a metal center xyz file
+
+# count lines in metalCenter.cdxml file
+
+  numLines_metal_cdxml=$(awk 'END{print NR}' metalCenter.cdxml)
+  #echo $numLines_metal_cdxml " lines" 
+
+#create array containing line numbers for where each atom starts
+
+  metalAtomLines=$(grep -n "><n" metalCenter.cdxml | sed 's/:.*//')
+  arrayMetalAtomLines=(${metalAtomLines// /})
+  echo "Metal atom at line: " $metalAtomLines >> metal_output.log
+
+#grab line of colored atom
+
+  metalColorLine=$(grep -n 'color="8"' metalCenter.cdxml | sed 's/:.*//')
+  arrayMetalColorLine=(${metalColorLine// /})
+  echo "metalColorLine = " $metalColorLine >> metal_output.log
+
+#list all color lines
+  egrep -own 'color=".[a-z]*' metalCenter.cdxml >> color.txt
+
+#colorLineArray=()
+#arrayCounter=0
+
+  colorLines=$(wc -l < "color.txt")
+  #echo "number of lines in color.txt = " $colorLines
+  a=1
+  file="color.txt"
+  while [ $a -le $colorLines ] 
+  do
+    #echo "line number " $a " = " $(awk -v lineNum=$a '{if (NR == lineNum) {print $0}}' $file)
+    colorLabel=$(awk -v lineNum=$a '{if (NR == lineNum) {print substr($0,length,1)}}' $file)
+    #echo "color label = " $colorLabel
+    colorLine=$(awk -v lineNum=$a -F: '{if (NR == lineNum) {print $1}}' $file)
+    #echo "color Line = " $colorLine
+    if [ $colorLabel -ne 0 ]
+    then
+      echo $colorLine >> colorLines.txt
+    fi
+    a=$((a+1))
+  done
+
+#element line number - follows color number
+  lineFile="colorLines.txt"
+  line=$(awk '{if (NR == 1) {print $0}}' $lineFile)
+  metalElementLine=$((line+1))
+  echo "metalElementLine= " $metalElementLine >> metal_output.log
+
+#assigning metal label
+  metal_file="metalCenter.cdxml"
+  metalLabelInfo=$(awk -v lineNum=$metalElementLine '{if (NR == lineNum) {print $0}}' $metal_file)
+  echo $metalLabelInfo >> metalInfo.txt
+  metal_element=$(awk -F'"' '{if (NR == 1) {print ($0=$2)}1}' "metalInfo.txt")
+  echo "metal element = " $metal_element >> metal_output.log
+  elementSymbol=$(awk -v lineNum=$metal_element '{if (NR == lineNum) {print $2}1}' "ptable.txt")
+  echo "element = " $elementSymbol >> metal_output.log
+  echo $elementSymbol >> METAL_LABEL
+
+#replace element line with carbon element line in a copy of metalCenter.cdxml (tmpMetal.cdxml)
+
+  cat metalCenter.cdxml >> tmpMetal.cdxml
+  dummyLine='Element="16"'
+  sed -i "${metalElementLine}d" tmpMetal.cdxml
+  sed -i "98i\ ${dummyLine}" tmpMetal.cdxml
+
+### section done ###
+
+# step 2: convert cdxml files to xyz files
+
+  /export/apps/Babel/2.3.2/bin/babel tmpMetal.cdxml metalCenter.xyz --gen3d
+
+### section done ###
+
+# step 3: edit metalCenter.xyz file to correct for carbon atom added in step 1b.
+
+# step 3a: identify atom number of metal center
+
+  true=0
+  for atom in ${arrayMetalAtomLines[@]}
+  do
+    if [ "$atom" -lt "$metalElementLine" ]
+    then
+      true=$((true+1))
+    else
+      metalCenterNumber=$true
+    fi
+  done
+  echo "Metal Center is atom number: " $metalCenterNumber >> metal_output.log
+
+### section done ###
+
+# step 3b: remove metal center Number from metalCenter.xyz & copy line to a new tmp file
+#let metalCenterNumber=$metalCenterNumber+2
+
+  metalLine_xyz=$((metalCenterNumber+2))
+  cat metalCenter.xyz > refMetalCenter.xyz
+  sed -n "${metalLine_xyz}p" metalCenter.xyz > tmpMetalLine.xyz
+  sed -i "${metalLine_xyz}d" metalCenter.xyz
+  sed -i "s/S/${elementSymbol}/g" tmpMetalLine.xyz
+  metalLine=$(cat tmpMetalLine.xyz)
+  sed -i "3i ${metalLine}" metalCenter.xyz 
+
+else
+  echo " "
+  echo "WARNING"
+  echo "metalCenter.cdxml file is missing"
+  echo "Please manually create target.xyz and CHARGE2 files within each bcatLigand directory"
+  echo "WARNING"
+  echo " "
+  echo "0" > CHARGE_METAL
+fi
+
+### section done ###
+
+#####################################
+#                                   #
+#                                   #
+#     ligand generation section     #
+#                                   #
+#                                   #
+#####################################
+
+# step 1: convert cdxml to xyz
+
+/export/apps/Babel/2.3.2/bin/babel ligand.cdxml ligand.xyz --gen3d
+
+#cat ligand.xyz > ligands.xyz
+
+#step 2: count number of molecules in cdxml file
+frags=$(grep -c "fragment" ligand.cdxml)
+textFrag=$(grep -c "fragment><t" ligand.cdxml)
+molecules=$((frags-textFrag))
+echo "molecules= " $molecules >> gui_output.log
+
+
+#Step 4: identify number of atoms and labeled atoms for each ligand.
+
+#count lines in cdxml file
+numLines_cdxml=$(awk 'END{print NR}' ligand.cdxml)
+
+#create array containing line numbers for where each fragment starts
+fragLines=$(grep -n "fragment" ligand.cdxml | sed 's/:.*//')
+arrayFragLines=(${fragLines// /})
+
+#create array containing line numbers for where each atom definition starts
+atomLines=$(grep -n "><n" ligand.cdxml | sed 's/:.*//')
+arrayAtomLines=(${atomLines// /})
+
+#creates array containing line numbers where atom color is defined
+colorLines=$(grep -n 'color="' ligand.cdxml | sed 's/:.*//')
+arrayColorLines=(${colorLines// /})
+
+#creates array containing line numbers where atom charges are defined
+chargeLines=$(grep -n 'Charge="' ligand.cdxml | sed 's/:.*//')
+arrayChargeLines=(${chargeLines// /})
+
+#prints arrays to check values
+echo " "
+echo "fragment lines = ${arrayFragLines[@]}" >> gui_output.log
+echo "atom lines = ${arrayAtomLines[@]}" >> gui_output.log
+echo " "
+
+#Section identifies which atoms belong to which fragments
+
+#variables & arrays
+lenFrag=$molecules
+lenAtom=0
+lenLabeled=0
+atomNum=0
+fragNum=0
+labeledAtomNum=0
+labelCounter=0
+atomArrayCounter=0
+
+declare -a LABELS
+declare -a ATOMS
+declare -a CHARGES
+
+#get length of each array
+
+#length of atom array = number of atoms total in ligand.cdxml
+for x in ${arrayAtomLines[@]}
+do  
+  let lenAtom=$lenAtom+1
+done
+
+for z in ${arrayFragLines[@]}
+do
+  let lenFrag=$lenFrag
+done
+
+#assigning number of atoms to each fragment (ligand)
+
+atom=0
+fragLow=0
+fragHigh=1
+fragAtoms=0
+
+while [ $atom -lt $lenAtom ]
+do
+  if [[ ${arrayAtomLines[$atom]} -lt ${arrayFragLines[$fragHigh]}  &&
+        ${arrayAtomLines[$atom]} -gt ${arrayFragLines[$fragLow]} ]]
+  then
+    atomNum=$((atom+1))
+    echo "atom " $atomNum " belongs to ligand " $fragHigh >> gui_output.log
+    fragAtoms=$((fragAtoms+1))
+    if [ $atomNum -eq $lenAtom ]
+    then
+      echo "ligand " $fragHigh " has " $fragAtoms " atoms." >> gui_output.log
+      echo $fragAtoms >> fragAtoms.txt
+    fi 
+  else
+    echo "ligand " $fragHigh " has " $fragAtoms " atoms." >> gui_output.log
+    echo $fragAtoms >> fragAtoms.txt
+    fragAtoms=0
+    atom=$((atom-1))
+    fragLow=$((fragLow+1))
+    fragHigh=$((fragHigh+1))
+  fi
+  atom=$((atom+1))
+done
+
+#copying all color lines to ligandColor.txt
+egrep -own 'color=".[a-z]*' ligand.cdxml >> colorLigand.txt
+
+#sorting lines for colors not equal to 0
+ligandColorLines=$(wc -l < "colorLigand.txt")
+a=1
+file="colorLigand.txt"
+while [ $a -le $ligandColorLines ]
+do
+  ligandColorLabel=$(awk -v lineNum=$a '{if (NR == lineNum) {print substr($0,length,1)}}' $file)
+  ligandColorLine=$(awk -v lineNum=$a -F: '{if (NR == lineNum) {print $1}}' $file)
+  if [ $ligandColorLabel -ne 0 ]
+  then
+    echo $ligandColorLine >> ligandColorLines.txt
+  fi
+  a=$((a+1))
+done
+
+ligColLines=$(wc -l < "ligandColorLines.txt")
+count=1
+a=1
+b=0
+c=1
+atom=0
+duplicate=0
+file="ligandColorLines.txt"
+while [ $a -le $ligColLines ]
+do
+  echo $(awk -v lineNum=$c '{if (NR == lineNum) {print $0}}' $file)
+  while [ $count -le $lenAtom ]
+  do
+    ligColLine=$(awk -v lineNum=$c '{if (NR == lineNum) {print $0}}' $file)
+    if [ $ligColLine -gt ${arrayAtomLines[$b]} ]
+    then
+      b=$((b+1))
+      atom=$((atom+1))
+    else
+      c=$((c+1))
+      b=0
+      if [ $duplicate -ne $atom ]
+      then
+        if [ $atom -ne 0 ]
+        then
+          echo $atom >> labeledAtoms.txt
+          duplicate=$atom
+        fi
+      fi
+      atom=0
+      count=$((count+1))
+    fi
+  done
+  a=$((a+1))
+done
+
+#appending labeled atoms to ADD files
+
+a=1
+otherAtoms=0
+atom=1
+ligand=1
+b=1
+totalAtoms=$lenAtom
+totalLabeledAtoms=$(wc -l < "labeledAtoms.txt")
+
+file1="fragAtoms.txt"
+file2="labeledAtoms.txt"
+
+while [ $a -le $totalLabeledAtoms ]
+do
+  fragAtoms=$(awk -v lineNum=$b '{if (NR == lineNum) {print $1}}' $file1)
+  labAtom=$(awk -v lineNum=$atom '{if (NR == lineNum) {print $1}}' $file2)
+  totalAtoms=$((otherAtoms+fragAtoms))
+  if [ $labAtom -gt $totalAtoms ]
+  then
+    ligand=$((ligand+1))
+    b=$((b+1))
+    otherAtoms=$fragAtoms
+  fi
+  if [ $labAtom -le $fragAtoms ]
+  then
+    label=$labAtom
+    echo $label " 1" >> ADD$ligand
+  else
+    labAtom=$((labAtom-fragAtoms))
+    if [ $labAtom -gt 1 ]
+    then
+      label=$((labAtom))
+      echo $label " 1" >> ADD$ligand
+    else
+      label=$labAtom
+      echo $label " 1" >> ADD$ligand
+    fi
+  fi
+  atom=$((atom+1))
+  a=$((a+1))
+done
+
+#copying all charge lines to ligandCharge.txt
+egrep -own 'Charge=".[0-9]*' ligand.cdxml >> chargeLigand.txt
+
+#sorting lines for charges and assigning to molecules
+ligandChargeLines=$(wc -l < "chargeLigand.txt")
+a=1
+a2=1
+b=0
+c=1
+count=1
+lig=1
+charge=0
+file="chargeLigand.txt"
+while [ $a -le $((ligandChargeLines+1)) ]
+do
+  #ligandChargeLabel=$(awk -v lineNum=$a -F'"' '{if (NR == lineNum) {print $2}}' $file)
+  #ligandChargeLine=$(awk -v lineNum=$a -F: '{if (NR == lineNum) {print $1}}' $file)
+  while [ $count -le $lenFrag ]
+  do
+    while [ $a2 -lt $((ligandChargeLines+1)) ]
+    do
+      ligandChargeLabel=$(awk -v lineNum=$a2 -F'"' '{if (NR == lineNum) {print $2}}' $file)
+      ligandChargeLine=$(awk -v lineNum=$a2 -F: '{if (NR == lineNum) {print $1}}' $file) 
+      echo $charge > CHARGE$lig
+      echo "chargeLine=" $ligandChargeLine
+      echo "b=" ${arrayFragLines[$b]}
+      echo "c=" ${arrayFragLines[$c]}
+      if [ $ligandChargeLine -gt ${arrayFragLines[$b]} ]
+      then
+        if [ $ligandChargeLine -lt ${arrayFragLines[$c]} ]
+        then
+          echo "ligand charge label=" $ligandChargeLabel
+          charge=$((charge+ligandChargeLabel))
+          echo "charge=" $charge
+          echo $charge > CHARGE$lig
+        else
+          lig=$((lig+1))
+          c=$((c+1))
+          charge=$ligandChargeLabel
+          if [ $a -eq $((ligandChangeLines+1)) ]
+          then
+            echo $charge > CHARGE$lig
+          fi
+        fi
+      fi
+      a2=$((a2+1))
+    done
+    count=$((count+1))
+  done
+  a=$((a+1))
+done
+
+#create seperate ligand.xyz files
+cat "ligand.xyz" >> "ligand.txt"
+file="ligand.txt"
+ligands=$(wc -l < $file)
+ligandLinesXYZ=$(wc -l < $file)
+a=1 #line number in ligand.xyz
+b=0 #xyz line of ligand being copied
+c=1 #xyz line in ligand.xyz being copied
+d=1 #ligand
+
+while [ $a -le $ligandLinesXYZ ]
+do
+  ligandAtoms=$(awk -v lineNum=$a '{if (NR == lineNum) {print $0}}' $file)
+  ligandLines=$((ligandAtoms+2))
+  while [ $b -lt $ligandLines ]
+  do
+    xyzLine=$(awk -v lineNum=$c '{if (NR == lineNum) {print $0}}' $file)
+    echo $xyzLine >> ligand$d.xyz
+    c=$((c+1))
+    b=$((b+1)) 
+  done
+  d=$((d+1))
+  a=$((a+ligandLines))
+  b=0
+done
+
+
+#create folders for each respective ligand
+file="fragAtoms.txt"
+ligands=$(wc -l < $file)
+a=0
+b=1
+while [ $a -lt $ligands ]
+do
+  mkdir ./bcatLigand$b
+  dest=./bcatLigand$b
+  add=./ADD$b
+  charge=./CHARGE$b
+  chargem=./CHARGE_METAL
+  xyz=./ligand$b.xyz
+  mxyz=./metalCenter.xyz
+  cp "$add" "$dest/ADD"
+  cp "$charge" "$dest/CHARGE1"
+  cp "$chargem" "$dest/CHARGE2"
+  cp "$xyz" "$dest/test.xyz"
+  cp "$mxyz" "$dest/target.xyz"
+
+  file1="files.txt"
+  for line in $(<files.txt)
+  do
+    cp -rf "$line" bcatLigand$b
+  done
+  b=$((b+1))
+  a=$((a+1))
+done
+
+

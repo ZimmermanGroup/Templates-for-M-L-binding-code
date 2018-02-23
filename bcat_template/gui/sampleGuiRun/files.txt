@@ -1,0 +1,8 @@
+bcat.exe
+bcat_readme
+gfstringq.exe
+inpfileq
+OPT_DFT
+qmake_bcat
+setupbcat
+target.xyz

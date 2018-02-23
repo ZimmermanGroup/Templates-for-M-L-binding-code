@@ -1,0 +1,35 @@
+Notes for running Z conformer search
+
+test.xyz: contains ligand xyz file
+target.xyz: contains metal center
+CHARGE1: contains charge of test.xyz structure (ligand)
+CHARGE2: contains charge of target.xyz structure (metal center)
+
+setupbcat: local variables for python libraries/directories
+progress.log: bcat.exe output
+
+conformers only
+all.xyz: output file with nonoptimized conformers
+all2.xyz: output with semiempirically optimized conformers
+
+For alignments
+all3.xyz: alignments of ligand and metal center
+all4.xyz: chelated structures
+all5.xyz: lowest energy chelated structures
+
+qmake_bcat : creates submision file for conformer search & bcat calcs along with scratch directory 
+
+run.qsh : submision file (use qsub run.qsh)
+
+scratch folder required, without any files in it (generated when qmake_bcat is ran)
+
+for allignment:
+target.xyz : contains fixed .xyz of the metal center/molecule you want to add ligands to
+ADD : contains atoms to be alligned. listed as ligand atom followed by metal center atom
+ex: ligand atoms 5,7 want to be added to the metal center which is atom 1.
+ADD file would look as follows
+
+5 1
+7 1
+
+alignment runs on OMP_NUM_THREADS squared in run.qsh file (if 16 cores then this should be 4)

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+
+if [ ! -f all5.xyz ];
+then
+  echo "all5.xyz file does not exist"
+  echo "copy all5.xyz into this folder and try again"
+  exit 0
+else
+
+
+rm -f all5.xyz.bak
+NUMLINES=$(grep -c '' all5.xyz) #num lines in all5.xyz
+FIRSTLINE=`head -n 1 all5.xyz`  #num atoms in structure
+atoms=$((FIRSTLINE+2))          #atoms + 2 = 1 structure
+structures=$((NUMLINES/atoms))  #number of structures
+hydrogenLine=$atoms		#line definding M-H atom xyz coords
+startLine=1
+newatom=$((FIRSTLINE-1))
+a=0
+echo $hydrogenLine
+echo $atoms
+echo $structures
+
+
+while [ $a -lt $structures ]
+do
+  sed -i "${startLine}s/.*/$newatom/" all5.xyz
+  sed -i.bak -e "$hydrogenLine"'d' all5.xyz
+  hydrogenLine=$[$hydrogenLine+$atoms-1]
+  echo $hydrogenLine
+  startLine=$[$startLine+$atoms-1]
+  echo $a
+  a=$[$a+1]
+done
+fi

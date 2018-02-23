@@ -1,0 +1,11 @@
+molecules=  3
+fragment lines = 89 144 207
+atom lines = 93 106 120 148 161 177
+atom  1  belongs to ligand  1
+atom  2  belongs to ligand  1
+atom  3  belongs to ligand  1
+ligand  1  has  3  atoms.
+atom  4  belongs to ligand  2
+atom  5  belongs to ligand  2
+atom  6  belongs to ligand  2
+ligand  2  has  3  atoms.

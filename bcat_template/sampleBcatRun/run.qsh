@@ -1,0 +1,22 @@
+#PBS -l nodes=1:ppn=1 -l pmem=2000MB -l walltime=48:00:00
+#PBS -q zimmerman -N mono-depro6
+#PBS -e /export/zimmerman/adewyer/bcat/DowTests/ligands-mono/bcatRuns/6_deprotonated -o /export/zimmerman/adewyer/bcat/DowTests/ligands-mono/bcatRuns/6_deprotonated
+ 
+cd /export/zimmerman/adewyer/bcat/DowTests/ligands-mono/bcatRuns/6_deprotonated
+export OMP_NUM_THREADS=1
+ 
+module load Intel
+ 
+export PATH=/home/paulzim/openbabel241/bin/:$PATH
+export PYTHONPATH=/home/paulzim/openbabel241/lib/
+export LD_LIBRARY_PATH=/home/paulzim/openbabel241/lib:$LD_LIBRARY_PATH
+export MOPAC_LICENSE=/home/paulzim/mopac/
+ 
+if [ -e /tmp/MOPAC2016.exe ]
+then
+  echo "mopac already copied"
+else
+  cp /home/paulzim/mopac/MOPAC2016.exe /tmp/
+fi
+ 
+./bcat.exe > progress.log

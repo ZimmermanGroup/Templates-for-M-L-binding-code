@@ -1,0 +1,18 @@
+PBSTMPDIR for this session is:  /scratch/adewyer/7772914[3].athena
+PBSREMOTEDIR for this session is:  /export/lustre/adewyer/7772914[3].athena
+ 
+NOTE:  PBSTMPDIR is deleted when the job exits.  This
+       can be delayed 10 days by creating the file
+       PBSREMOTEDIR/.keep
+ 
+NOTE:  PBSREMOTEDIR is deleted 10 days after the job
+       exits.  Please archive your data after the
+       finishes.
+ 
+START TIME :Wed Nov  8 15:38:17 EST 2017
+ 
+ 77729143.athena
+exiting......done!
+ 
+FINISH TIME :Wed Nov  8 17:32:59 EST 2017
+ 

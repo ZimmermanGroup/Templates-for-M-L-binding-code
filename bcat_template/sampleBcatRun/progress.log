@@ -1,0 +1,174 @@
+
+
+ in main() 
+
+ xyzfile: test.xyz
+  natoms: 45
+**Starting Confab 1.1.0
+**To support, cite Journal of Cheminformatics, 2011, 3, 8.
+..Input format = xyz
+..Output format = xyz
+..RMSD cutoff = 0.5
+..Energy cutoff = 25
+..Conformer cutoff = 2000
+..Write input conformation? False
+..Verbose? False
+
+**Molecule 1
+..title = Step 52
+..number of rotatable bonds = 5
+..tot conformations = 15552
+..tot confs tested = 2000
+..below energy threshold = 8
+..generated 2 conformers
+
+ 45 
+
+  C -0.243761 -4.079453 -0.045188 
+  C 0.904301 -3.297141 0.043343 
+  C -1.033231 -4.083821 -1.210922 
+  H -0.543328 -4.695260 0.798098 
+  C -0.638081 -3.269681 -2.280692 
+  H -1.924756 -4.701938 -1.267125 
+  C 0.511732 -2.486999 -2.196953 
+  H -1.232197 -3.244828 -3.193042 
+  C 1.359613 -2.458588 -1.042805 
+  H 0.815466 -1.851438 -3.023432 
+  O 1.699682 -3.237067 1.211156 
+  C 1.206513 -3.863474 2.406975 
+  H 0.206370 -3.493439 2.676162 
+  H 1.920607 -3.600964 3.189655 
+  H 1.160709 -4.958579 2.311490 
+  N 2.409400 -1.605945 -1.020868 
+  C 3.573457 -1.639020 -0.285819 
+  C 4.003699 -0.432981 0.375955 
+  C 4.479669 -2.759523 -0.262029 
+  C 5.236742 -0.393599 1.035651 
+  C 5.703925 -2.662019 0.410319 
+  C 6.098518 -1.495892 1.072179 
+  H 6.372438 -3.522136 0.404176 
+  H 7.051098 -1.443374 1.593818 
+  H 5.525048 0.528729 1.540150 
+  C 3.139239 0.829408 0.392629 
+  C 2.953303 1.431628 -1.020712 
+  H 3.924152 1.704822 -1.454420 
+  H 2.327215 2.335335 -0.980162 
+  H 2.479036 0.684461 -1.663198 
+  C 1.773628 0.619063 1.087833 
+  H 1.225446 1.570902 1.154255 
+  H 1.912134 0.226093 2.102603 
+  H 1.173346 -0.097998 0.523826 
+  H 3.692538 1.571976 0.992545 
+  C 4.192545 -5.298149 -0.138550 
+  C 4.170676 -4.041339 -1.037494 
+  H 3.497575 -5.171183 0.696716 
+  H 5.194218 -5.480125 0.274944 
+  H 3.899201 -6.191925 -0.707342 
+  C 5.130143 -4.212272 -2.240573 
+  H 3.161308 -3.954724 -1.445497 
+  H 6.170913 -4.313796 -1.904668 
+  H 5.073008 -3.340019 -2.901484 
+  H 4.873742 -5.106998 -2.826562 
+ initializing MM parameters 
+ initial bonds 
+
+ printing internals 
+ number of bonds: 46
+ bond 1: 2 to 1: 1.3921 
+ bond 2: 3 to 1: 1.4079 
+ bond 3: 4 to 1: 1.0863 
+ bond 4: 5 to 3: 1.4012 
+ bond 5: 6 to 3: 1.0863 
+ bond 6: 7 to 5: 1.3934 
+ bond 7: 8 to 5: 1.0890 
+ bond 8: 9 to 2: 1.4458 
+ bond 9: 9 to 7: 1.4324 
+ bond 10: 10 to 7: 1.0859 
+ bond 11: 11 to 2: 1.4142 
+ bond 12: 12 to 11: 1.4372 
+ bond 13: 13 to 12: 1.0999 
+ bond 14: 14 to 12: 1.0915 
+ bond 15: 15 to 12: 1.1002 
+ bond 16: 16 to 9: 1.3526 
+ bond 17: 17 to 16: 1.3771 
+ bond 18: 18 to 17: 1.4414 
+ bond 19: 19 to 17: 1.4413 
+ bond 20: 20 to 18: 1.3990 
+ bond 21: 21 to 19: 1.4001 
+ bond 22: 22 to 20: 1.3997 
+ bond 23: 22 to 21: 1.3977 
+ bond 24: 23 to 21: 1.0894 
+ bond 25: 24 to 22: 1.0873 
+ bond 26: 25 to 20: 1.0901 
+ bond 27: 26 to 18: 1.5301 
+ bond 28: 27 to 26: 1.5475 
+ bond 29: 28 to 27: 1.0979 
+ bond 30: 29 to 27: 1.1001 
+ bond 31: 30 to 27: 1.0936 
+ bond 32: 31 to 26: 1.5468 
+ bond 33: 32 to 31: 1.1004 
+ bond 34: 33 to 31: 1.0970 
+ bond 35: 34 to 31: 1.0921 
+ bond 36: 35 to 26: 1.1034 
+ bond 37: 37 to 19: 1.5297 
+ bond 38: 37 to 36: 1.5454 
+ bond 39: 38 to 36: 1.0940 
+ bond 40: 39 to 36: 1.0988 
+ bond 41: 40 to 36: 1.0993 
+ bond 42: 41 to 37: 1.5483 
+ bond 43: 42 to 37: 1.0922 
+ bond 44: 43 to 41: 1.0983 
+ bond 45: 44 to 41: 1.0959 
+ bond 46: 45 to 41: 1.0998 
+
+  generating 2000 conformers of test.xyz 
+  there are 45 atoms 
+ done reading after  3 structures 
+ freeze list: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+  conformer energies: -33.68 -32.82 -37.93
+ done writing 
+ natoms: 45 
+ done reading XYZ 
+ natoms: 9 
+ done reading XYZ 
+  target structure: 
+ Zr  1.65937  1.55275 -0.09038 
+  C  0.47276  3.26156  0.01374 
+  H -0.53436  3.15250 -0.42716 
+  H  1.01835  4.07718 -0.51070 
+  H  0.33890  3.56383  1.07758 
+  C  0.16475  0.10342 -0.02380 
+  H  0.64858 -0.87995  0.15858 
+  H -0.40299  0.04776 -0.97741 
+  H -0.57298  0.30339  0.77956 
+
+ similarity matrix: 
+ 1 0 0
+ 0 1 0
+ 0 0 1
+ unique list: 1 1 1
+
+ ADD found: 11 46 
+ ADD found: 16 46 
+  now creating initial.xyz 
+ working on structure  1 
+ working on structure  2 
+ working on structure  3 
+
+ done writing 
+ done writing 
+ done reading after 810 structures 
+ done reading after 583 structures 
+ done reading after 1016 structures 
+ freeze list: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+  conformer energies: 97.53 95.08 95.01
+ done writing 
+ done generating complexes 
+
+  now checking bonding 
+
+  best structures: 
+    3: 95.01318 
+    2: 95.07892 
+    1: 97.52610 
+ done writing 

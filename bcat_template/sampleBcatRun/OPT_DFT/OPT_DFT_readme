@@ -1,0 +1,15 @@
+Readme for files within OPT_DFT folder
+
+1. charge.inp - contains overall charge of M-L complexes
+2. end.inp - contains endline for qchem optimization input file
+3. sample.inp - contains header for qchem optimization input file
+4. bcat_makeDFT - 
+     reads in all5.xyz file, splits into each individual molecule
+     generates q00X.structureX.inp file for each M-L complex in all5.xyz
+5. getOptEnergy -
+    grabs the energy from the output files of the qchem runs
+    appends them to the file optimized_energies_output_fromqchem.txt
+6. makeXYZ -
+    generates a folder called xyzFiles
+    grabs the xyz coordinates of the optimized structure
+    from the output file, and creates xyz files for each structure

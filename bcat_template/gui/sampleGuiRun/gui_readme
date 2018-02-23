@@ -1,0 +1,47 @@
+BCAT GUI README 
+
+Created: October 2017
+Readme updated: February 21, 2018
+Creator: Amanda Dewyer
+         Zimmerman Lab - University of Michigan, Ann Arbor
+
+The gui uses openbabel-2.3.1 to convert a chemdraw .cdxml file into a 3d structure
+open babel converts the file and installs H atoms that are not explicitly draw in the cdxml file
+
+The .cdxml file should contain the ligands of interest with the "reactive" atoms
+labeled by highlighting them in blue on the chem draw. Any atoms that are charged and
+deprotonted should be labeled with a charged symbol within the chemdraw.
+
+In addition to this the .cdxml file needs a text box with lists the charge of each ligand.
+
+Ex:
+
+Charges
+L1= 0
+L2= -1
+L3= 2
+End
+
+The gui performs the following procedure
+1.  converts cdxml file into xyz file labeled as ligands.xyz
+2.  counts number of ligands inside the cdxml file
+3.  assigns a charge to each ligand based on the charges listed
+    in the text box included in the cdxml file
+4.  identifies the number of atoms in each ligand
+5.  identifies which atoms in the ligands.xyz file are considered "reactive"
+    - identifies which atoms are highlighted in blue on the .cdxml file
+6.  creates files.txt - which is a list of files to be copied into new bcat directories
+7.  creates ligand directories (1 bcat directory for each ligand in the .cdxml file)
+8.  creates the ADD files for each ligand by reading in the labeled atoms and
+    then identifying which ligand they belong to.
+9.  creates the CHARGE1 file for the ligand charge by reading in the listed charges
+10. creates ligand.xyz files by breaking ligands.xyz into the individual molecules
+11. copies all neccessary files to their respective directories. 
+
+gui_ouput.log contains output from running convert_cdxml_xyz
+information includes the following
+1. number of molecules in cdxml file
+2. charges for each ligand
+3. what lines of the cdxml file pertain to molecules, atoms, and labeled atoms
+4. what molecule each atom belongs to as well as whether or not an atom is "reactive"/labeled
+5. charges, atoms in each molecule, labeled atoms (referenced to ligands.xyz)

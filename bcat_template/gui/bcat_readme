@@ -1,0 +1,29 @@
+Notes for running Z conformer search
+
+test.xyz: contains ligand xyz file
+target.xyz: contains metal center
+CHARGE1: contains charge of test (ligand)
+CHARGE2: contains charge of target (metal center)
+
+setupbcat: local variables
+progress.log: calculations
+
+all.xyz: output file with nonoptimized conformers
+all2.xyz: output with semiempirically optimized conformers
+
+For alignments
+all3.xyz: alignments of ligand and metal center
+all4.xyz: chelated structures
+all5.xyz: lowest energy chelated structures
+
+qmake_bcat : creates submision file for conformer search & bcat calcs along with scratch directory 
+
+run.qsh : submision file (use qsub run.qsh)
+
+scratch folder required (generated when qmake_bcat is ran)
+
+for allignment:
+target.xyz : contains fixed .xyz of the metal center/molecule you want to add ligands to
+ADD : contains atoms to be alligned. to the left is test.xyz and to the right target.xyz
+alignment runs on OMP_NUM_THREADS squared. (if 16 cores then this should be 4)
+

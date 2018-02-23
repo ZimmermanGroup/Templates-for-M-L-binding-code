@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo "setting up lalaland "
+file=run.qsh
+
+#echo "#PBS -l qos=flux -q flux" >> $file
+#echo "#PBS -A paulzim_flux" >> $file
+echo "#PBS -l nodes=1:ppn=1 -l pmem=2000MB -l walltime=2:00:00" > $file
+echo "#PBS -q zimmerman -N bcat_testing" >> $file
+echo "#PBS -e `pwd` -o `pwd`" >> $file
+echo " " >> $file
+echo "cd `pwd`" >> $file
+mkdir scratch
+echo 'export OMP_NUM_THREADS=1' >> $file
+echo " " >> $file
+#echo "module unload Babel" >> $file
+echo "module load Intel" >> $file
+echo " " >> $file
+echo 'export PATH=/home/paulzim/openbabel241/bin/:$PATH' >> $file
+echo 'export PYTHONPATH=/home/paulzim/openbabel241/lib/' >> $file
+echo 'export LD_LIBRARY_PATH=/home/paulzim/openbabel241/lib:$LD_LIBRARY_PATH' >> $file
+echo 'export MOPAC_LICENSE=/home/paulzim/mopac/' >> $file
+echo " " >> $file
+echo 'if [ -e /tmp/MOPAC2016.exe ]' >> $file
+echo 'then' >> $file
+echo '  echo "mopac already copied"' >> $file
+echo 'else' >> $file
+echo '  cp /home/paulzim/mopac/MOPAC2016.exe /tmp/' >> $file
+echo 'fi' >> $file
+echo " " >> $file
+echo "./bcat.exe > progress.log" >> $file
+
+
