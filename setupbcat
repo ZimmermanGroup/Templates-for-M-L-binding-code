@@ -1,7 +1,0 @@
-
-module unload Babel
-#module load Babel
-
-export PATH=/export/zimmerman/paulzim/openbabel241/bin/:$PATH
-export PYTHONPATH=/export/zimmerman/paulzim/openbabel241/lib/
-export LD_LIBRARY_PATH=/export/zimmerman/paulzim/openbabel241/lib:$LD_LIBRARY_PATH
