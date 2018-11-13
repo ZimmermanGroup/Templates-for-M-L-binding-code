@@ -1,0 +1,106 @@
+
+
+ in main() 
+
+ xyzfile: test.xyz
+  natoms: 7
+**Starting Confab 1.1.0
+**To support, cite Journal of Cheminformatics, 2011, 3, 8.
+..Input format = xyz
+..Output format = xyz
+..RMSD cutoff = 0.5
+..Energy cutoff = 50
+..Conformer cutoff = 10000
+..Write input conformation? False
+..Verbose? False
+
+**Molecule 1
+..title = Step 11
+..number of rotatable bonds = 1
+..tot conformations = 12
+..tot confs tested = 12
+..below energy threshold = 12
+..generated 2 conformers
+
+ 7 
+
+  N -2.626064 -0.019530 0.392841 
+  C -1.723656 0.815434 0.625727 
+  C -0.139137 0.909486 0.367126 
+  O 0.575078 -0.058585 -0.242806 
+  H -1.903270 1.922299 1.199268 
+  H 0.215283 1.215022 1.449568 
+  H -0.086103 1.981844 -0.120503 
+ initializing MM parameters 
+ initial bonds 
+
+ printing internals 
+ number of bonds: 6
+ bond 1: 2 to 1: 1.2513 
+ bond 2: 3 to 2: 1.6082 
+ bond 3: 4 to 3: 1.3488 
+ bond 4: 5 to 2: 1.2595 
+ bond 5: 6 to 3: 1.1793 
+ bond 6: 7 to 3: 1.1792 
+
+  generating 10000 conformers of test.xyz 
+  there are  7 atoms 
+ done reading after  2 structures 
+ freeze list: 0 0 0 0 0 0 0 
+ found E: total E       :     -12.8599640
+ found E: total E       :     -12.8794443
+ in xyz_read for file: scratch/xopt000.xyz.xyz 
+ freeze list: 0 0 0 0 0 0 0 
+ found E: total E       :     -12.8614875
+ found E: total E       :     -12.8859502
+ in xyz_read for file: scratch/xopt001.xyz.xyz 
+  conformer energies: -12.88 -12.89
+ done writing 
+ natoms: 7 
+ done reading XYZ 
+ natoms: 8 
+ done reading XYZ 
+  target structure: 
+ Pd -1.18059 -1.32432 -0.52190 
+  N -2.31307 -0.00956  0.35550 
+  C -1.64641  1.03515  0.72646 
+  C -0.18819  1.16130  0.47626 
+  O  0.31881 -0.06361 -0.17359 
+  H  0.36147  1.32383  1.41738 
+  H  0.01748  2.03012 -0.17032 
+  H -2.19711  1.83716  1.23257 
+
+ similarity matrix: 
+ 1 0
+ 0 1
+ unique list: 1 1
+
+ ADD found:  1  8 
+ ADD found:  4  8 
+  now creating initial.xyz 
+ working on structure  1 
+ working on structure  2 
+
+ done writing 
+ done writing 
+  doing GSM:  0  0 done  1  1 done
+ done reading after 336 structures 
+ done reading after 680 structures 
+ freeze list: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+ found E: total E       :     -30.2790995
+ found E: total E       :     -30.2800867
+ in xyz_read for file: scratch/xoptb000.xyz.xyz 
+ freeze list: 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+ found E: total E       :     -30.2327704
+ found E: total E       :     -30.2770301
+ in xyz_read for file: scratch/xoptb001.xyz.xyz 
+  conformer energies: -30.28 -30.28
+ done writing 
+ done generating complexes 
+
+  now checking bonding 
+  struct  2 bonds changed, eliminating 
+
+  best structures: 
+    1: -30.28009 
+ done writing 
