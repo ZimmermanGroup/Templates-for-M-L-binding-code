@@ -1,9 +1,9 @@
 # bcat constrained input
 
 ------------ BCat Info --------------------------------
-ROTATION   0     # rotations = 360/n (0=0, 1=0,180, 2=0,120,240, etc..)
+ROTATION   1     # rotations = 360/n (0=0, 1=0,180, 2=0,120,240, etc..)
 ALIGN      0     # multiple alignments off/on 0/1
-CONSTRAIN  1      # off/on 0/1
+CONSTRAIN  0     # off/on 0/1
 ATOMS      2 3 4 5 6 7 done # list atoms for constrained rotation
 ---------------------------------------------------------
 
